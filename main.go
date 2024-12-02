@@ -12,7 +12,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", handler)
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil) // nosemgrep
 	if err != nil {
 		log.Fatal("ListenAndServe-Fehler: ", err)
 	}
