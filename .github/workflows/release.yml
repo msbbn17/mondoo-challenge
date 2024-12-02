@@ -1,0 +1,36 @@
+name: Release Workflow
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.23.3'
+      - name: Run tests
+        run: go test ./main.go
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.23.3'
+      - name: Build
+        run: go build -o mondoo-webserver ./main.go
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+            tag: ${{ github.event.release.tag_name }}
+            files: mondoo-webserver
+        env:
+            GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_PAT }}
