@@ -1,10 +1,6 @@
 name: Mondoo Pipeline
 
 on:
-  push:
-    branches:
-      - main
-      - dev
   release:
     types: [created]
 
@@ -46,16 +42,3 @@ jobs:
 
       - name: Build the binary
         run: go build -o mondoo-webserver ./main.go
-
-  trigger-docker-build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Docker Build in Target Repository
-        env:
-          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_PAT }}
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.everest-preview+json" \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            https://api.github.com/repos/msbbn17/phase2/dispatches \
-            -d '{"event_type": "trigger-docker-build", "client_payload": {}}'
