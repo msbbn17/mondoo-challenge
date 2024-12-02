@@ -1,9 +1,12 @@
 name: golangci-lint
+
 on:
   push:
     branches:
       - main
       - dev
+  release:
+    types: [created]
 
 permissions:
   contents: read
