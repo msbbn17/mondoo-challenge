@@ -1,4 +1,4 @@
-name: golangci-lint
+name: semgrep
 on:
   push:
     branches:
