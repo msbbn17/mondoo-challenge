@@ -1,0 +1,44 @@
+name: Mondoo Pipeline
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
+
+  semgrep:
+    name: semgrep-oss/scan
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+      - run: semgrep scan --config auto
+
+  build:
+    name: Build Binary
+    runs-on: ubuntu-latest
+    needs: [golangci, semgrep]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.23.3'
+
+      - name: Build the binary
+        run: go build -o mondoo-webserver ./main.go
