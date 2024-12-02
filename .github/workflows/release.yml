@@ -2,7 +2,7 @@ name: Release Workflow
 
 on:
   workflow_run:
-    workflows: ["Mondoo Pipeline"]  # Name of the test workflow
+    workflows: ["Mondoo Pipeline"]
     types:
       - completed
 
@@ -14,6 +14,7 @@ jobs:
   release-linux-amd64:
     name: release linux/amd64
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v4
     - uses: wangyoucao577/go-release-action@v1
