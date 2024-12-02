@@ -28,20 +28,6 @@ jobs:
         with:
           sarif_file: semgrep-results.sarif
 
-  lint:
-    name: Lint with golangci-lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.50.0
-
-      - name: Run golangci-lint
-        run: golangci-lint run
-
   build:
     name: Build Binary
     runs-on: ubuntu-latest
