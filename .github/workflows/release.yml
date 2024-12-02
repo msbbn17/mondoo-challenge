@@ -14,17 +14,20 @@ permissions:
 
 jobs:
   release-linux-amd64:
-    name: release linux/amd64
+    name: Release linux/amd64
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'release' }}  # Run if previous workflow was successful or if it's a release event
     steps:
-    - uses: actions/checkout@v4
-    - uses: wangyoucao577/go-release-action@v1
-      with:
-        github_token: ${{ secrets.CREATE_RELEASE_PAT }}
-        release_tag: ${{ github.event.release.tag_name }}
-        goos: linux
-        goarch: amd64
+      - uses: actions/checkout@v4
+      - name: Get Release Tag
+        id: get_release_tag
+        run: echo "RELEASE_TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV  # Set environment variable for later use
+      - uses: wangyoucao577/go-release-action@v1
+        with:
+          github_token: ${{ secrets.CREATE_RELEASE_PAT }}
+          release_tag: ${{ env.RELEASE_TAG }}  # Use the environment variable set above
+          goos: linux
+          goarch: amd64
 
   trigger-docker-build:
     runs-on: ubuntu-latest
