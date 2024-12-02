@@ -1,12 +1,12 @@
 name: Release Workflow
 
 on:
+  release:
+    types: [created]
   workflow_run:
     workflows: ["Mondoo Pipeline"]
     types:
       - completed
-  release:
-    types: [created]
 
 permissions:
     contents: write
