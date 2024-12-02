@@ -5,6 +5,8 @@ on:
     workflows: ["Mondoo Pipeline"]
     types:
       - completed
+  release:
+    types: [created]
 
 permissions:
     contents: write
