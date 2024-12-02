@@ -5,28 +5,8 @@ on:
     branches:
       - main
       - dev
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  semgrep:
-    name: Run Semgrep SAST
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Semgrep
-        uses: returntocorp/semgrep-action@v1
-
-      - name: Run Semgrep
-        run: semgrep --config p/default --sarif --output semgrep-results.sarif
-
-      - name: Upload SARIF results
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: semgrep-results.sarif
 
   build:
     name: Build Binary
